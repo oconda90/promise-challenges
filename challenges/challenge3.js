@@ -7,13 +7,21 @@
  *    Async/Await. How is this function different than a regular (non-async)
  *    function? What is its return type?
  * 
+ * My Answer: This function is different from a regular non-async function since, 
+ * while it has the same functionality, it only runs the function
+ * after both Promises have been executed on the name parameter is passed .
  * 
  * 2. Uncomment block #1 and run the code using `node challenge3.js`. What is
  *    printed when we use `greetAndUppercase` like a regular function?
  * 
+ *  My Answer: After uncommenting and running the function, the output was 
+ * "Promise { <pending> }"
  * 
  * 3. Uncomment block #2 and run the code again. What happens now?
  * 
+ * My Answer: After uncommenting block #2 and running the fucntion,
+ * the same result happeed like after uncommenting the first block "Promise { <pending> }", 
+ * and after all the Peomises were executed the result "HELLO THERE, DUCKY" was outputted.
  * 
  * 4. Write an asynchronous method 'spacer' that takes a string as input and 
  *    returns the input string with a space added between each character. You 
@@ -61,21 +69,39 @@ function uppercaser(str) {
     });
 }
 
+/**
+ *  Returns the string but with a place in between each letter.
+ * @param {*} str The string to space.
+ */
+ function spacer(str) {
+  return new Promise(function(resolve, reject) {
+      setTimeout(function() {
+      if (typeof str === 'string') {
+          resolve(str.split('').join(' '));
+      } else {
+          reject('Argument to space must be a string!');
+      }
+      }, 2000);
+  });
+}
+
 async function greetAndUppercase(name) {
     greeting = await greet(name)
     uppercasedGreeting = await uppercaser(greeting)
+    space = await spacer(uppercasedGreeting)
     return uppercasedGreeting
 }
 
 /* Uncomment me! #1 */
-// result = greetAndUppercase('Ducky')
-// console.log(result)
+ result = greetAndUppercase('Ducky')
+ // result = greetAndUppercase(7689)
+ console.log(result)
 
 /* Uncomment me! #2 */
-// greetAndUppercase('Ducky')
-//     .then(function(result) {
-//         console.log(result)
-//     })
-//     .catch(function(err) {
-//         console.log(err)
-//     })
+greetAndUppercase('Ducky')
+     .then(function(result) {
+         console.log(result)
+     })
+     .catch(function(err) {
+         console.log(err)
+     })
